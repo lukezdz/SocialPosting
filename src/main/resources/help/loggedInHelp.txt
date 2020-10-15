@@ -1,0 +1,17 @@
+usage: [command]
+No need to give any arguments. You will be asked for all necessary information.
+
+These are commands you can use:
+logOut                      logs you out
+viewPosts                   views all posts of all users
+viewUsers                   views all users
+viewMyPosts                 views all your posts
+viewFollowed                views all users you follow
+viewFollowedUsersPosts      views all posts of all users you follow
+follow                      follow user
+unfollow                    unfollow user
+addPost                     views all posts of all users
+deletePost                  deletes your post with given post-id
+deleteAccount               deletes your account, deletes all your posts and logs you out
+whoami                      shows all information about you
+exit                        exits this application
