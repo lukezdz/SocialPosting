@@ -18,12 +18,12 @@ public class PostRepository implements Repository<Post, String> {
 	}
 
 	@Override
-	public Optional<Post> get(String id) {
+	public Optional<Post> find(String id) {
 		return dataStore.getPost(id);
 	}
 
 	@Override
-	public List<Post> getAll() {
+	public List<Post> findAll() {
 		return dataStore.getPosts();
 	}
 

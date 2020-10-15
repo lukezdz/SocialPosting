@@ -8,19 +8,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
-import pl.edu.pg.eti.aui.SocialPosting.post.entity.Post;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.List;
 
 
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
+@SuperBuilder
 public class User implements Serializable {
 	@Getter
 	@Setter
@@ -32,22 +32,18 @@ public class User implements Serializable {
 
 	@Getter
 	@Setter
-	private String login;
-
-	@Getter
-	@Setter
 	private String email;
 
 	@Getter
 	@Setter
-	private Date birthDate;
-
-	@ToString.Exclude
-	private String password;
+	private LocalDate birthDate;
 
 	@Getter
 	@Setter
-	private Set<Post> posts;
+	private List<String> followedUsersEmails;
+
+	@ToString.Exclude
+	private String password;
 
 	public void setPassword(String password) {
 		this.password = DigestUtils.sha256Hex(password);
@@ -55,5 +51,9 @@ public class User implements Serializable {
 
 	public boolean checkPassword(String password) {
 		return this.password.equals(DigestUtils.sha256Hex(password));
+	}
+
+	public String basicInfo() {
+		return String.format("%s %s, %s", getName(), getSurname(), getEmail());
 	}
 }

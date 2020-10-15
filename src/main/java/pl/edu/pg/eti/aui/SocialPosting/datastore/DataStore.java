@@ -21,17 +21,17 @@ public class DataStore {
 		return new ArrayList<>(users);
 	}
 
-	public synchronized Optional<User> getUser(String login) {
+	public synchronized Optional<User> getUser(String email) {
 		return users.stream()
-				.filter(user -> user.getLogin().equals(login))
+				.filter(user -> user.getEmail().equals(email))
 				.findFirst();
 	}
 
 	public synchronized void addUser(User user) {
-		getUser(user.getLogin()).ifPresentOrElse(
+		getUser(user.getEmail()).ifPresentOrElse(
 				original -> {
 					throw new IllegalArgumentException(
-							String.format("User login \"%s\" is not unique", user.getLogin()));
+							String.format("User login \"%s\" is not unique", user.getEmail()));
 				},
 				() -> users.add(user));
 	}

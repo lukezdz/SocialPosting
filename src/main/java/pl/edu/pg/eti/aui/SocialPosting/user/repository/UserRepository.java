@@ -18,13 +18,12 @@ public class UserRepository implements Repository<User, String> {
 	}
 
 	@Override
-	public Optional<User> get(String id) {
-
-		return Optional.empty();
+	public Optional<User> find(String email) {
+		return findAll().stream().filter(user -> user.getEmail().equals(email)).findFirst();
 	}
 
 	@Override
-	public List<User> getAll() {
+	public List<User> findAll() {
 		return dataStore.getUsers();
 	}
 

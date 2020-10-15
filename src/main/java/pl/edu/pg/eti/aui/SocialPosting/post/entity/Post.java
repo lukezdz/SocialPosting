@@ -8,9 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import pl.edu.pg.eti.aui.SocialPosting.user.entity.User;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -22,6 +22,10 @@ import java.util.List;
 public class Post {
 	private String id;
 	private String content;
-	private Date creationTime;
-	private List<String> comments;
+	private LocalDateTime creationTime;
+	private User author;
+
+	public String presentContent() {
+		return String.format("%s:\n%s\nid: %s\n%s", getAuthor().basicInfo(), creationTime.toString(), id, content);
+	}
 }
