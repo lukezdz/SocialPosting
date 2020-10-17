@@ -10,7 +10,7 @@ viewFollowed                views all users you follow
 viewFollowedUsersPosts      views all posts of all users you follow
 follow                      follow user
 unfollow                    unfollow user
-addPost                     views all posts of all users
+addPost                     adds a post
 deletePost                  deletes your post with given post-id
 deleteAccount               deletes your account, deletes all your posts and logs you out
 whoami                      shows all information about you
