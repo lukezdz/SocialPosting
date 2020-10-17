@@ -2,6 +2,7 @@ package pl.edu.pg.eti.aui.SocialPosting.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pg.eti.aui.SocialPosting.post.service.PostService;
 import pl.edu.pg.eti.aui.SocialPosting.user.entity.User;
 import pl.edu.pg.eti.aui.SocialPosting.user.repository.UserRepository;
 
@@ -13,10 +14,12 @@ import java.util.Optional;
 @Service
 public class UserService {
 	private UserRepository userRepository;
+	private PostService postService;
 
 	@Autowired
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, PostService postService) {
 		this.userRepository = userRepository;
+		this.postService = postService;
 	}
 
 	public void add(User user) {
@@ -36,7 +39,13 @@ public class UserService {
 	}
 
 	public void deleteAccount(String email) {
-		find(email).ifPresentOrElse(user -> userRepository.delete(user), () -> System.out.println("Something went wrong"));
+		find(email).ifPresentOrElse(user -> {
+			postService.findByUser(user).forEach(post -> {
+				String id = post.getId();
+				postService.delete(id, email);
+			});
+			userRepository.delete(user);
+			}, () -> System.err.println("Something went wrong"));
 	}
 
 	public List<User> findAll() {
