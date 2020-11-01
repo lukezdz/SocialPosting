@@ -3,6 +3,7 @@ package pl.edu.pg.eti.aui.SocialPosting.post.service;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pg.eti.aui.SocialPosting.post.entity.Post;
 import pl.edu.pg.eti.aui.SocialPosting.post.repository.PostRepository;
 import pl.edu.pg.eti.aui.SocialPosting.user.entity.User;
@@ -26,7 +27,7 @@ public class PostService {
 	}
 
 	public Optional<Post> find(String id) {
-		return postRepository.find(id);
+		return postRepository.findById(id);
 	}
 
 	public List<Post> findByUser(User user) {
@@ -37,6 +38,11 @@ public class PostService {
 	}
 
 	public void add(String content, User user) {
+		create(content, user);
+	}
+
+	@Transactional
+	public Post create(String content, User user) {
 		LocalDateTime now = LocalDateTime.now();
 		String contentHash = DigestUtils.sha256Hex(content);
 		String id = DigestUtils.sha256Hex(String.format("%s %s %s", user.getEmail(), contentHash, now.toString()));
@@ -46,9 +52,16 @@ public class PostService {
 				.creationTime(now)
 				.id(id)
 				.build();
-		postRepository.add(post);
+
+		return postRepository.save(post);
 	}
 
+	@Transactional
+	public void update(Post post) {
+		postRepository.save(post);
+	}
+
+	@Transactional
 	public void delete(String id, String authorsEmail) {
 		find(id).ifPresentOrElse(post -> {
 			if (post.getAuthor().getEmail().equals(authorsEmail)) {

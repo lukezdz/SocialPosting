@@ -46,12 +46,12 @@ public class DataInitializer {
 		userService.add(jeffCudos, DEFAULT_PASSWORD);
 		userService.add(billFences, DEFAULT_PASSWORD);
 
-		postService.add("I really don't like those Congress people!", markCucumber);
-		postService.add("I am not a Reptilian!!! What are you talking about???", markCucumber);
-		postService.add("My company is named after a place that has a rainforest!", jeffCudos);
-		postService.add("Free shipping for everyone who buys Bumblebee membership!", jeffCudos);
-		postService.add("New update to Walls is now live!", billFences);
-		postService.add("Pancakes.", billFences);
-		postService.add("I've added a post!", billFences);
+		postService.create("I really don't like those Congress people!", markCucumber);
+		postService.create("I am not a Reptilian!!! What are you talking about???", markCucumber);
+		postService.create("My company is named after a place that has a rainforest!", jeffCudos);
+		postService.create("Free shipping for everyone who buys Bumblebee membership!", jeffCudos);
+		postService.create("New update to Walls is now live!", billFences);
+		postService.create("Pancakes.", billFences);
+		postService.create("I've added a post!", billFences);
 	}
 }

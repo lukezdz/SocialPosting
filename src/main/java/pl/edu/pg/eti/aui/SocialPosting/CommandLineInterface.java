@@ -223,10 +223,8 @@ public class CommandLineInterface implements CommandLineRunner {
 		checkIfLoggedIn();
 		try {
 			userService.find(currentUserEmail).ifPresent(user -> {
-				user.getFollowedUsersEmails().forEach(followedUserEmail -> {
-					userService.find(followedUserEmail).ifPresent(followedUser -> {
+				user.getFollowedUsers().forEach(followedUser -> {
 						System.out.println(followedUser.basicInfo());
-					});
 				});
 			});
 		}
@@ -237,11 +235,9 @@ public class CommandLineInterface implements CommandLineRunner {
 		checkIfLoggedIn();
 		try {
 			userService.find(currentUserEmail).ifPresent(user -> {
-				user.getFollowedUsersEmails().forEach(followedUserEmail -> {
-					userService.find(followedUserEmail).ifPresent(followedUser -> {
-						postService.findByUser(followedUser).forEach(post -> {
-							System.out.println(post.presentContent());
-						});
+				user.getFollowedUsers().forEach(followedUser -> {
+					postService.findByUser(followedUser).forEach(post -> {
+						System.out.println(post.presentContent());
 					});
 				});
 			});

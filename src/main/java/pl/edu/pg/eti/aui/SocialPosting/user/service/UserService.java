@@ -2,12 +2,13 @@ package pl.edu.pg.eti.aui.SocialPosting.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pg.eti.aui.SocialPosting.post.service.PostService;
 import pl.edu.pg.eti.aui.SocialPosting.user.entity.User;
 import pl.edu.pg.eti.aui.SocialPosting.user.repository.UserRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,22 +23,31 @@ public class UserService {
 		this.postService = postService;
 	}
 
+	@Transactional
 	public void add(User user) {
-		user.setFollowedUsersEmails(new ArrayList<String>());
-		userRepository.add(user);
+		user.setFollowedUsers(new HashSet<>());
+		userRepository.save(user);
 	}
 
+	@Transactional
 	public void add(User user, String password) {
-		user.setFollowedUsersEmails(new ArrayList<String>());
+		user.setFollowedUsers(new HashSet<>());
 		user.setPassword(password);
-		userRepository.add(user);
+		userRepository.save(user);
 	}
 
-	public void createAccount(String email, String name, String surname, String password, LocalDate birthDate) {
+	public User createAccount(String email, String name, String surname, String password, LocalDate birthDate) {
 		User user = User.builder().email(email).name(name).surname(surname).birthDate(birthDate).build();
 		add(user, password);
+		return user;
 	}
 
+	@Transactional
+	public void update(User user) {
+		userRepository.save(user);
+	}
+
+	@Transactional
 	public void deleteAccount(String email) {
 		find(email).ifPresentOrElse(user -> {
 			postService.findByUser(user).forEach(post -> {
@@ -52,14 +62,17 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
+	@Transactional
 	public Optional<User> find(String email) {
-		return userRepository.find(email);
+		return userRepository.findByEmail(email);
 	}
 
+	@Transactional
 	public void follow(String myEmail, String toFollowEmail) {
 		find(myEmail).ifPresentOrElse(me -> {
 			find(toFollowEmail).ifPresentOrElse(toFollow -> {
-				me.getFollowedUsersEmails().add(toFollow.getEmail());
+				me.getFollowedUsers().add(toFollow);
+				userRepository.save(me);
 				System.out.printf("%s %s has been followed!%n", toFollow.getName(), toFollow.getSurname());
 			}, () -> {
 				System.err.println("Couldn't find user to follow.");
@@ -69,10 +82,12 @@ public class UserService {
 		});
 	}
 
+	@Transactional
 	public void unfollow(String myEmail, String toUnfollowEmail) {
 		find(myEmail).ifPresentOrElse(me -> {
 			find(toUnfollowEmail).ifPresentOrElse(toUnfollow -> {
-				me.getFollowedUsersEmails().remove(toUnfollow.getEmail());
+				me.getFollowedUsers().remove(toUnfollow);
+				userRepository.save(me);
 				System.out.printf("%s %s has been unfollowed.%n", toUnfollow.getName(), toUnfollow.getSurname());
 			}, () -> {
 				System.err.println("Given user doesn't exist or isn't followed by you.");
