@@ -1,4 +1,5 @@
 import {UserData, UserEmails, Users} from '../user/users';
+import { Utils } from '../utils/utils';
 
 const users = new Users();
 
@@ -30,16 +31,14 @@ export function createUserListUserContainer(userData: UserData): void {
 	email.classList.add('user-list-info-email');
 	userDiv.appendChild(email);
 
-	const follow = document.createElement('button');
-	follow.textContent = 'Follow';
-	follow.addEventListener('click', function(){handleFollowButton(userData.email)});
-	follow.classList.add('user-list-follow-button')
-	userDiv.appendChild(follow);
+	// if (Utils.isUserLoggedIn()) {
+	// 	const follow = document.createElement('button');
+	// 	follow.textContent = 'Follow';
+	// 	follow.addEventListener('click', function(){handleFollowButton(userData.email)});
+	// 	follow.classList.add('user-list-follow-button')
+	// 	userDiv.appendChild(follow);
+	// }
 
 	link.appendChild(userDiv);
 	document.getElementById('user-list-container')?.appendChild(wrappingDiv);
-}
-
-export function handleFollowButton(email: string) {
-	console.log("Hello ma frjend!");
 }

@@ -32,11 +32,15 @@ export class Utils {
 	}
 
 	public static saveUserEmail(email: string) {
-		localStorage.setItem('currEmail', email);
+		sessionStorage.setItem('currEmail', email);
+	}
+
+	public static deleteUserEmail() {
+		sessionStorage.removeItem('currEmail');
 	}
 
 	public static getLoggedInUserEmail(): string | null {
-		return localStorage.getItem('currEmail');
+		return sessionStorage.getItem('currEmail');
 	}
 
 	public static isUserLoggedIn(): boolean {
@@ -58,7 +62,7 @@ export class HttpClient {
 	public delete(url, callback) {
 		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
-			if(this.readyState === 4 && this.status === 200) {
+			if(this.readyState === 4 && this.status === 202) {
 				callback();
 			}
 		};

@@ -1,9 +1,10 @@
 import { CreateUserRequest, Users } from '../user/users';
+import { Utils } from '../utils/utils';
 
 
 const users = new Users();
 
-export function preparePage() {
+export function prepareSingUpPage() {
 	const button = document.getElementById('create-account-button');
 	button?.addEventListener('click', checkAndSendRequest);
 }
@@ -53,5 +54,5 @@ export function checkAndSendRequest() {
 		password: password.value
 	}
 
-	users.createUser(request, function(){location.replace(`http://localhost:8084/views/user?email=${email.value}`)});
+	users.createUser(request, function(){Utils.saveUserEmail(email.value); location.replace(`http://localhost:8084/views/user?email=${email.value}`)});
 }

@@ -20,5 +20,5 @@ module.exports = {
 	  libraryTarget: 'var',
 	  library: 'SocialPostingFrontend',
 	},
-	mode: 'development'
+	mode: 'production'
   };

@@ -1,31 +1,47 @@
 import { Users } from './user/users';
 import { Posts } from './post/posts';
-import { displayPostList }  from './scripts/postList';
-import { preparePage } from './scripts/singUp'
-import { displayUserList } from './scripts/userList';
-import { displayFullUserInfo } from './scripts/user';
-import { prepareLoginPage } from './scripts/login';
+import { prepareEditPage } from './viewsScripts/editUser';
+import { displayPostList }  from './viewsScripts/postList';
+import { prepareSingUpPage } from './viewsScripts/singUp'
+import { displayUserList } from './viewsScripts/userList';
+import { displayFullUserInfo } from './viewsScripts/user';
+import { prepareLoginPage } from './viewsScripts/login';
+import { prepareNavigationBar } from './viewsScripts/shared';
 
 const users = new Users();
 const posts = new Posts();
 
+export function editUserScript() {
+	prepareNavigationBar();
+	prepareEditPage();
+}
+
+export function indexScript() {
+	prepareNavigationBar();
+}
+
 export function loginScript() {
+	prepareNavigationBar();
 	prepareLoginPage();
 }
 
 export function postListScript() {
+	prepareNavigationBar();
 	posts.getPostIds(displayPostList);
 }
 
 export function signUpScript() {
-	preparePage();
+	prepareNavigationBar();
+	prepareSingUpPage();
 }
 
 export function userListScript() {
+	prepareNavigationBar();
 	users.getUsersEmails(displayUserList);
 }
 
 export function userScript() {
+	prepareNavigationBar();
 	const params = new URLSearchParams(window.location.search);
 	const email = params.get('email');
 	if (email) {

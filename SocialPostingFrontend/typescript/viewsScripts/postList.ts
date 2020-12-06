@@ -34,12 +34,21 @@ function createPostListPostContainer(postData: PostData) {
 	date.classList.add('post-list-date');
 	postDiv.appendChild(date);
 
-	const edit = document.createElement('button');
-	edit.textContent = 'Edit';
-	edit.addEventListener('click', function(){handleEditButton(postData.id)});
-	edit.classList.add('post-list-edit-button');
-	edit.id = `${postData.id}-EditButton`
-	postDiv.appendChild(edit);
+	if (Utils.isUserLoggedIn() && Utils.getLoggedInUserEmail() === postData.authorEmail) {
+		const edit = document.createElement('button');
+		edit.textContent = 'Edit';
+		edit.addEventListener('click', function(){handleEditButton(postData.id)});
+		edit.classList.add('post-list-edit-button');
+		edit.id = `${postData.id}-EditButton`
+		postDiv.appendChild(edit);
+
+		const deleteButton = document.createElement('button');
+		deleteButton.textContent = 'Delete';
+		deleteButton.addEventListener('click', function(){handleDeleteButton(postData.id)});
+		deleteButton.classList.add('post-list-delete-button');
+		edit.id = `${postData.id}-DeleteButton`;
+		postDiv.appendChild(deleteButton);
+	}
 
 	const content = document.createElement('p');
 	content.textContent = postData.content;
@@ -55,11 +64,13 @@ function handleEditButton(id: string) {
 	const div = document.getElementById(id);
 	const contentElement = document.getElementById(`${id}-Content`);
 	const editButton = document.getElementById(`${id}-EditButton`);
+	const deleteButton = document.getElementById(`${id}-DeleteButton`);
 
 	if (contentElement) {
 		const text = contentElement.textContent;
 		contentElement.remove();
 		editButton?.remove();
+		deleteButton?.remove();
 
 		const textArea = document.createElement('textarea');
 		textArea.textContent = text;
@@ -82,4 +93,8 @@ function handleSaveButton(id: string) {
 	if(content) {
 		posts.updatePost(id, content, function(){window.location.reload()});
 	}
+}
+
+function handleDeleteButton(id: string) {
+	posts.deletePost(id);
 }

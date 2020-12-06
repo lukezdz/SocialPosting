@@ -5,7 +5,7 @@
 	<title>SocialPosting</title>
 	<link rel="stylesheet" href="/css/style.css"/>
 	<script src="/dist/socialPostingFrontendBundle.js"></script>
-	<script src="./post_list.js"></script>
+	<script src="./edit_user.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -19,8 +19,19 @@
 				<div class="nav-login" id="nav-login-link"><a class="linkless" href="/views/login"><h3 class="nav-login">Log in</h3></a></div>
 			</div>
 		</div>
-		<div class="main-content" id="post-list-container">
-			
+		<div class="main-content">
+			<div class="" id="input-container">
+				<label for="name" class="input-label">Name</label>
+				<input id="name" type="text" class="input-field">
+
+				<label for="surname" class="input-label">Surname</label>
+				<input id="surname" type="text" class="input-field">
+
+				<label for="birth" class="input-label">Birth date</label>
+				<input id="birth" type="date" class="input-field">
+
+				<button id="save-user-info-button" class="create-account-button">Save</button>
+			</div>
 		</div>
 
 		<footer>

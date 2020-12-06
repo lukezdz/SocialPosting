@@ -52,4 +52,8 @@ export class Posts {
 		}
 		this.client.put(`${this.backendURL}/${id}`, callback, request);
 	}
+
+	public deletePost(id: string) {
+		this.client.delete(`${this.backendURL}/${id}`, function(){location.reload()});
+	}
 }

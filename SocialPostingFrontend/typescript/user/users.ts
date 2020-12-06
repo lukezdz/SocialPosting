@@ -12,6 +12,7 @@ export interface UserData {
 	readonly email: string,
 	readonly name: string,
 	readonly surname: string,
+	readonly birthDate: string,
 	readonly followedUsersEmails: string[],
 	readonly password?: string
 }
@@ -51,5 +52,25 @@ export class Users {
 			'password': password
 		}
 		this.client.post(`${this.backendURL}/login`, function() {Utils.saveUserEmail(email); location.replace(`http://localhost:8084/views/user?email=${email}`)}, request);
+	}
+
+	public follow(currEmail: string, toFollow: string) {
+		const request = {
+			'email': currEmail,
+			'toFollow': toFollow
+		}
+		this.client.put(`${this.backendURL}/follow`, function() {location.reload()}, request);
+	}
+
+	public unfollow(currEmail: string, toUnfollow: string) {
+		const request = {
+			'email': currEmail,
+			'toUnfollow': toUnfollow
+		}
+		this.client.put(`${this.backendURL}/unfollow`, function() {location.reload()}, request);
+	}
+
+	public deleteUser(email: string) {
+		this.client.delete(`${this.backendURL}/${email}`, function() {Utils.deleteUserEmail(); location.replace(`http://localhost:8084/views/user_list`)});
 	}
 }
