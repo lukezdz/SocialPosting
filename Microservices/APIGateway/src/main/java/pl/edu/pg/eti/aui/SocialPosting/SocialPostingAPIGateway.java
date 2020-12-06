@@ -27,7 +27,7 @@ public class SocialPostingAPIGateway {
 						.uri("http://localhost:8081"))
 				.route("users", r -> r.host("localhost:8080")
 						.and()
-						.path("/api/users", "/api/users/{email}", "/api/users/follow", "/api/users/unfollow", "/api/users/password/{email}")
+						.path("/api/users", "/api/users/{email}", "/api/users/follow", "/api/users/unfollow", "/api/users/password/{email}", "/api/users/login")
 						.uri("http://localhost:8083"))
 				.build();
 	}

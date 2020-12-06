@@ -1,5 +1,6 @@
 package pl.edu.pg.eti.aui.SocialPosting.user.controller;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -21,6 +22,7 @@ import pl.edu.pg.eti.aui.SocialPosting.user.dto.CreateUserRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.FollowUserRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.GetUserResponse;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.GetUsersResponse;
+import pl.edu.pg.eti.aui.SocialPosting.user.dto.LoginRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.UnfollowUserRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.UpdatePasswordRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.UpdateUserRequest;
@@ -68,6 +70,16 @@ public class UserController {
 
 		return ResponseEntity.created(builder.pathSegment("api", "users", "{email}")
 				.buildAndExpand(user.getEmail()).toUri()).build();
+	}
+
+	@PostMapping("login")
+	public ResponseEntity<Void> login(@RequestBody LoginRequest request) {
+		Optional<User> user = userService.find(request.getEmail());
+		if (user.isPresent() && user.get().checkPassword(request.getPassword())) {
+			return ResponseEntity.accepted().build();
+		}
+
+		return ResponseEntity.badRequest().build();
 	}
 
 	@DeleteMapping("{email}")

@@ -1,0 +1,16 @@
+{
+	"module": "es6",
+	"target": "es5",
+	"jsx": "react",
+	"allowJs": true,
+	"noImplicitAny": true,
+    "files": [
+		"./typescript/utils/utils.ts",
+		"./typescript/post/posts.ts",
+		"./typescript/user/users.ts",
+		"./typescript/socialPostingFrontend.ts",
+	],
+	"compilerOptions": {
+		"strictNullChecks": true
+	}
+}
