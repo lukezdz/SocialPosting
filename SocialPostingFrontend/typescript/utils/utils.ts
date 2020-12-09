@@ -51,6 +51,140 @@ export class Utils {
 	}
 }
 
+export interface EventHandlerConfig {
+	event: string,
+	handler
+}
+
+export interface TextAreaProps {
+	text?: string,
+	placeholder?: string,
+	classes?: string[],
+	id?: string
+}
+
+export interface ButtonProps {
+	text: string,
+	config?: EventHandlerConfig[],
+	classes?: string[],
+	id?: string
+}
+
+export class DOMUtils {
+	public static createH2(text: string, classes?: string[], id?: string): HTMLHeadingElement {
+		return this.createHeading(2, text, classes, id);
+	}
+
+	public static createH3(text: string, classes?: string[], id?: string): HTMLHeadingElement {
+		return this.createHeading(3, text, classes, id);
+	}
+
+	public static createH4(text: string, classes?: string[], id?: string): HTMLHeadingElement {
+		return this.createHeading(4, text, classes, id);
+	}
+
+	private static createHeading(headingSize: number, text: string, classes?: string[], id?: string): HTMLHeadingElement {
+		const heading = document.createElement(`h${headingSize}`) as HTMLHeadingElement;
+		heading.textContent = text;
+
+		if(id) {
+			heading.id = id;
+		}
+
+		if(classes) {
+			heading.classList.add(...classes);
+		}
+
+		return heading;
+	}
+
+	public static createParagraph(text: string, classes?: string[], id?: string): HTMLParagraphElement {
+		const paragraph = document.createElement('p') as HTMLParagraphElement;
+		paragraph.textContent = text;
+
+		if(id) {
+			paragraph.id = id;
+		}
+
+		if(classes) {
+			paragraph.classList.add(...classes);
+		}
+
+		return paragraph;
+	}
+
+	public static createDiv(classes?: string[], id?: string): HTMLDivElement {
+		const div = document.createElement('div');
+		
+		if(id) {
+			div.id = id;
+		}
+
+		if(classes) {
+			div.classList.add(...classes);
+		}
+
+		return div;
+	}
+
+	public static createButton(props: ButtonProps): HTMLButtonElement {
+		const button = document.createElement('button') as HTMLButtonElement;
+		button.textContent = props.text;
+		
+		if (props.config) {
+			for(let con of props.config) {
+				button.addEventListener(con.event, con.handler);
+			}
+		}
+
+		if (props.id) {
+			button.id = props.id;
+		}
+
+		if (props.classes) {
+			button.classList.add(...props.classes);
+		}
+
+		return button;
+	}
+
+	public static createLink(href: string, classes?: string[], id?: string): HTMLAnchorElement {
+		const link = document.createElement('a');
+		link.href = href;
+
+		if (id) {
+			link.id = id;
+		}
+
+		if (classes) {
+			link.classList.add(...classes);
+		}
+
+		return link;
+	}
+
+	public static createTextArea(props: TextAreaProps): HTMLTextAreaElement {
+		const textArea = document.createElement('textarea');
+		if (props.text) {
+			textArea.textContent = props.text;
+		}
+
+		if (props.placeholder) {
+			textArea.placeholder = props.placeholder;
+		}
+		
+		if (props.classes) {
+			textArea.classList.add(...props.classes);
+		}
+
+		if (props.id) {
+			textArea.id = props.id;
+		}
+
+		return textArea;
+	}
+}
+
 export class HttpClient {
 	baseURL: string;
 

@@ -1,5 +1,5 @@
 import {UserData, UserEmails, Users} from '../user/users';
-import { Utils } from '../utils/utils';
+import { DOMUtils, Utils } from '../utils/utils';
 
 const users = new Users();
 
@@ -13,31 +13,16 @@ export function displayUserList(usersEmails: UserEmails): void {
 export function createUserListUserContainer(userData: UserData): void {
 	const wrappingDiv = document.createElement('div');
 	
-	const link = document.createElement('a');
-	link.href = `../views/user?email=${userData.email}`;
-	link.classList.add('linkless');
+	const link = DOMUtils.createLink(`../views/user?email=${userData.email}`, ['linkless']);
 	wrappingDiv.appendChild(link);
 
-	const userDiv = document.createElement('div');
-	userDiv.classList.add('user-list-info-container');
+	const userDiv = DOMUtils.createDiv(['user-list-info-container']);
 
-	const name = document.createElement('h4');
-	name.textContent = `${userData.name} ${userData.surname}`;
-	name.classList.add('user-list-info-name');
+	const name = DOMUtils.createH4(`${userData.name} ${userData.surname}`, ['user-list-info-name']);
 	userDiv.appendChild(name);
 
-	const email = document.createElement('p');
-	email.textContent = userData.email;
-	email.classList.add('user-list-info-email');
+	const email = DOMUtils.createParagraph(userData.email, ['user-list-info-email']);
 	userDiv.appendChild(email);
-
-	// if (Utils.isUserLoggedIn()) {
-	// 	const follow = document.createElement('button');
-	// 	follow.textContent = 'Follow';
-	// 	follow.addEventListener('click', function(){handleFollowButton(userData.email)});
-	// 	follow.classList.add('user-list-follow-button')
-	// 	userDiv.appendChild(follow);
-	// }
 
 	link.appendChild(userDiv);
 	document.getElementById('user-list-container')?.appendChild(wrappingDiv);

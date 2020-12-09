@@ -1,5 +1,5 @@
 import { Posts, PostsData, PostData } from '../post/posts';
-import { Utils } from '../utils/utils';
+import { DOMUtils, Utils } from '../utils/utils';
 
 const posts = new Posts();
 
@@ -15,45 +15,35 @@ export function displayPostList(postsData: PostsData) {
 }
 
 function createPostListPostContainer(postData: PostData) {
-	const postDiv = document.createElement('div');
-	postDiv.classList.add('post-list-post-container');
-	postDiv.id = postData.id;
+	const postDiv = DOMUtils.createDiv(['post-list-post-container'], postData.id);
 
-	const link = document.createElement('a');
-	link.href = `../views/user?email=${postData.authorEmail}`;
-	link.classList.add('linkless');
+	const link = DOMUtils.createLink(`../views/user?email=${postData.authorEmail}`, ['linkless']);
+	const userInfo = DOMUtils.createParagraph(postData.authorEmail, ['post-list-user-email']);
+	link.appendChild(userInfo);
 	postDiv.appendChild(link);
 
-	const userInfo = document.createElement('p');
-	userInfo.textContent = postData.authorEmail;
-	userInfo.classList.add('post-list-user-email');
-	link.appendChild(userInfo);
-
-	const date = document.createElement('p');
-	date.textContent = Utils.isoFormatDateFriendlyDate(postData.creationTime);
-	date.classList.add('post-list-date');
+	const date = DOMUtils.createParagraph(Utils.isoFormatDateFriendlyDate(postData.creationTime), ['post-list-date']);
 	postDiv.appendChild(date);
 
 	if (Utils.isUserLoggedIn() && Utils.getLoggedInUserEmail() === postData.authorEmail) {
-		const edit = document.createElement('button');
-		edit.textContent = 'Edit';
-		edit.addEventListener('click', function(){handleEditButton(postData.id)});
-		edit.classList.add('post-list-edit-button');
-		edit.id = `${postData.id}-EditButton`
-		postDiv.appendChild(edit);
+		const editButton = DOMUtils.createButton({
+			text: 'Edit',
+			config: [{event: 'click', handler: function() {handleEditButton(postData.id)}}],
+			classes: ['post-list-edit-button'],
+			id: `${postData.id}-EditButton`
+		})
+		postDiv.appendChild(editButton);
 
-		const deleteButton = document.createElement('button');
-		deleteButton.textContent = 'Delete';
-		deleteButton.addEventListener('click', function(){handleDeleteButton(postData.id)});
-		deleteButton.classList.add('post-list-delete-button');
-		edit.id = `${postData.id}-DeleteButton`;
+		const deleteButton = DOMUtils.createButton({
+			text: 'Delete',
+			config: [{event: 'click', handler: function() {handleDeleteButton(postData.id)}}],
+			classes: ['post-list-delete-button'],
+			id: `${postData.id}-DeleteButton`
+		});
 		postDiv.appendChild(deleteButton);
 	}
 
-	const content = document.createElement('p');
-	content.textContent = postData.content;
-	content.classList.add('post-list-post-content');
-	content.id = `${postData.id}-Content`;
+	const content = DOMUtils.createParagraph(postData.content, ['post-list-post-content'], `${postData.id}-Content`);
 	postDiv.appendChild(content);
 
 	const container = document.getElementById('post-list-container');
@@ -72,16 +62,18 @@ function handleEditButton(id: string) {
 		editButton?.remove();
 		deleteButton?.remove();
 
-		const textArea = document.createElement('textarea');
-		textArea.textContent = text;
-		textArea.classList.add('post-list-edit-area');
-		textArea.id = `${id}-EditArea`
+		const textArea = DOMUtils.createTextArea({
+			text: text!,
+			classes: ['post-list-edit-area'],
+			id: `${id}-EditArea`
+		});
 		div?.appendChild(textArea);
 		
-		const saveEdit = document.createElement('button');
-		saveEdit.textContent = 'Save';
-		saveEdit.classList.add('post-list-edit-save-button');
-		saveEdit.addEventListener('click', function() {handleSaveButton(id)})
+		const saveEdit = DOMUtils.createButton({
+			text: 'Save',
+			config: [{event: 'click', handler: function() {handleSaveButton(id)}}],
+			classes: ['post-list-edit-save-button']
+		});
 		div?.appendChild(saveEdit);
 	}
 
