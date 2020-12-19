@@ -13,7 +13,7 @@ To deploy Social Posting application use provided `docker-compose.yml`, by runni
 ```bash
 docker-compose up
 ```
-when in SocialPosting directory. This will generate docker network and 4 docker containers - frontend web server, backend API gateway and 2 containers for each micro service running in the backend.
+when in SocialPosting directory. This will generate 2 docker networks (frontend and backend) and 5 docker containers - frontend web server, reverse proxy, backend API gateway and 2 containers for each micro service running in the backend.
 
 Frontend web server is reachable on `localhost:8084`. You can also make HTTP requests directly to API gateway through reverse proxy, which is running on `localhost:8080`.
 When making requests to backend make sure to use exposed port (`localhost:8080`), not internal docker name, as host is unable to resolve this name.
