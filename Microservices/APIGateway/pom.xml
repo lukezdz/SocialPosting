@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.edu.pg.eti.aui</groupId>
-    <artifactId>SocialPosting</artifactId>
+    <artifactId>SocialPosting_APIGateway</artifactId>
     <version>0.1</version>
     <name>APIGateway</name>
     <description>Gateway for SocialPosting micro services</description>

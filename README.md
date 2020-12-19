@@ -6,12 +6,24 @@ This is a project created for Internet Services' Architectures course on Gdansk 
 It represents a simplified version of e.g. Twitter. There are users, who can post some thoughts. Each post contains text. Each user can create many different posts. Users can follow each other.
 
 ## Architecture
-This project has been split to Monolithic and Microservices directories. Monolithic contains files of service before it was split to individual microservices - User Microservice, Post microservice and API Gateway, which is routing requests to Social Posting services to proper microservices.
+This project has been split to Monolithic and Microservices directories. Monolithic contains files of service before it was split to individual microservices - User Microservice, Post microservice and API Gateway, which is routing requests to Social Posting service to proper microservices.
 
 ## Usage
-All requests should be made to the API Gateway, which is listening on `localhost:8080`. `localhost:8080/api/posts/**` requests are routed to the Post Microservice and all `localhost:8080/api/users/**` requests are routed to the User Microservice.
+To deploy Social Posting application use provided `docker-compose.yml`, by running
+```bash
+docker-compose up
+```
+when in SocialPosting directory. This will generate docker network and 4 docker containers - frontend web server, backend API gateway and 2 containers for each micro service running in the backend.
 
-Sample requests are given in this repository in form of Postman collection.
+Frontend web server is reachable on `localhost:8084`. You can also make HTTP requests directly to API gateway through reverse proxy, which is running on `localhost:8080`.
+When making requests to backend make sure to use exposed port (`localhost:8080`), not internal docker name, as host is unable to resolve this name.
+
+If you want to make any changes to any of the backend services make sure to later package it to jar.
+```bash
+mvn package
+```
+
+## API reference
 
 ### GET requests
 | Request | Explanation |

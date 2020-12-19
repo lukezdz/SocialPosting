@@ -17,7 +17,7 @@ export function displayPostList(postsData: PostsData) {
 function createPostListPostContainer(postData: PostData) {
 	const postDiv = DOMUtils.createDiv(['post-list-post-container'], postData.id);
 
-	const link = DOMUtils.createLink(`../views/user?email=${postData.authorEmail}`, ['linkless']);
+	const link = DOMUtils.createLink(`../views/user.html?email=${postData.authorEmail}`, ['linkless']);
 	const userInfo = DOMUtils.createParagraph(postData.authorEmail, ['post-list-user-email']);
 	link.appendChild(userInfo);
 	postDiv.appendChild(link);

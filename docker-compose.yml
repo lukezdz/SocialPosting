@@ -1,0 +1,47 @@
+version: "3.9"
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: frontend_dockerfile
+    ports:
+      - 8084:80
+    networks:
+      frontend:
+  reverse_proxy:
+    container_name: reverse_proxy
+    build:
+      context: .
+      dockerfile: reverseproxy_dockerfile
+    ports:
+      - 8080:80
+    networks:
+      frontend:
+        aliases:
+          - apigateway
+      backend:
+  apigateway:
+    container_name: apigateway
+    build:
+      context: .
+      dockerfile: apigateway_dockerfile
+    networks:
+      backend:
+  usermicroservice:
+    container_name: usermicroservice
+    build:
+      context: .
+      dockerfile: usermicroservice_dockerfile
+    networks:
+      backend:
+  postmicroservice:
+    container_name: postmicroservice
+    build:
+      context: .
+      dockerfile: postmicroservice_dockerfile
+    networks:
+      backend:
+networks:
+  frontend:
+  backend:

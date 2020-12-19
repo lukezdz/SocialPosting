@@ -51,7 +51,7 @@ export class Users {
 			'email': email,
 			'password': password
 		}
-		this.client.post(`${this.backendURL}/login`, function() {Utils.saveUserEmail(email); location.replace(`http://localhost:8084/views/user?email=${email}`)}, request);
+		this.client.post(`${this.backendURL}/login`, function() {Utils.saveUserEmail(email); location.replace(`http://localhost:8084/views/user.html?email=${email}`)}, request);
 	}
 
 	public follow(currEmail: string, toFollow: string) {
@@ -71,6 +71,6 @@ export class Users {
 	}
 
 	public deleteUser(email: string) {
-		this.client.delete(`${this.backendURL}/${email}`, function() {Utils.deleteUserEmail(); location.replace(`http://localhost:8084/views/user_list`)});
+		this.client.delete(`${this.backendURL}/${email}`, function() {Utils.deleteUserEmail(); location.replace(`http://localhost:8084/views/user_list.html`)});
 	}
 }

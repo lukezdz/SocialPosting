@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.edu.pg.eti.aui</groupId>
-    <artifactId>SocialPosting</artifactId>
+    <artifactId>SocialPosting_UserMicroservice</artifactId>
     <version>0.1</version>
     <name>UserMicroservice</name>
     <description>Microservice for user management for AUI laboratories on ETI faculty of GUT</description>

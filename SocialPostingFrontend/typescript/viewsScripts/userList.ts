@@ -13,7 +13,7 @@ export function displayUserList(usersEmails: UserEmails): void {
 export function createUserListUserContainer(userData: UserData): void {
 	const wrappingDiv = document.createElement('div');
 	
-	const link = DOMUtils.createLink(`../views/user?email=${userData.email}`, ['linkless']);
+	const link = DOMUtils.createLink(`../views/user.html?email=${userData.email}`, ['linkless']);
 	wrappingDiv.appendChild(link);
 
 	const userDiv = DOMUtils.createDiv(['user-list-info-container']);

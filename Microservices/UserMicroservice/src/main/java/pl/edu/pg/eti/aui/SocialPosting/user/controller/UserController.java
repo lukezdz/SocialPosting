@@ -1,6 +1,5 @@
 package pl.edu.pg.eti.aui.SocialPosting.user.controller;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -60,12 +59,12 @@ public class UserController {
 
 		// create corresponding user in post microservice
 		RestTemplate restTemplate = new RestTemplate();
-		String createUserUrl = "http://localhost:8081/api/users";
+		String createUserUrl = "http://postmicroservice/api/users";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		JSONObject userJsonObject = new JSONObject();
 		userJsonObject.put("email", config.getEmail());
-		HttpEntity<String> createUserRequest = new HttpEntity<String>(userJsonObject.toString(), headers);
+		HttpEntity<String> createUserRequest = new HttpEntity<>(userJsonObject.toString(), headers);
 		restTemplate.postForObject(createUserUrl, createUserRequest, String.class);
 
 		return ResponseEntity.created(builder.pathSegment("api", "users", "{email}")
@@ -90,7 +89,7 @@ public class UserController {
 			// delete all posts by this user
 			try {
 				RestTemplate restTemplate = new RestTemplate();
-				String request = String.format("http://localhost:8081/api/users/%s", email);
+				String request = String.format("http://postmicroservice/api/users/%s", email);
 				restTemplate.delete(request);
 			}
 			catch (RestClientException exception) {

@@ -1,0 +1,19 @@
+FROM ubuntu
+
+ENV DEBIAN_FRONTEND=noninteractive 
+ARG FINAL_DEST="/var/www/html"
+
+RUN apt-get update
+RUN apt-get install -y apache2 apache2-utils
+RUN apt-get clean
+
+COPY "./SocialPostingFrontend/index.html" "${FINAL_DEST}/index.html"
+COPY "./SocialPostingFrontend/index.js" "${FINAL_DEST}/index.js"
+COPY "./SocialPostingFrontend/views" "${FINAL_DEST}/views"
+COPY "./SocialPostingFrontend/dist" "${FINAL_DEST}/dist"
+COPY "./SocialPostingFrontend/css" "${FINAL_DEST}/css"
+COPY "./SocialPostingFrontend/favicon.ico" "${FINAL_DEST}/favicon.ico"
+
+EXPOSE 80
+
+CMD ["apache2ctl", "-D", "FOREGROUND"]

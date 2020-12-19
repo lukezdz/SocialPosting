@@ -21,14 +21,22 @@ public class SocialPostingAPIGateway {
 	@Bean
 	public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
 		return builder.routes()
-				.route("posts", r -> r.host("localhost:8080")
+				.route("posts", r -> r.host("apigateway")
 						.and()
 						.path("/api/posts", "/api/posts/{id}", "/api/posts/by/{email}", "/api/posts/followed/{email}")
-						.uri("http://localhost:8081"))
-				.route("users", r -> r.host("localhost:8080")
+						.uri("http://postmicroservice:80"))
+				.route("posts_v2", r -> r.host("localhost:8080")
+						.and()
+						.path("/api/posts", "/api/posts/{id}", "/api/posts/by/{email}", "/api/posts/followed/{email}")
+						.uri("http://postmicroservice:80"))
+				.route("users", r -> r.host("apigateway")
 						.and()
 						.path("/api/users", "/api/users/{email}", "/api/users/follow", "/api/users/unfollow", "/api/users/password/{email}", "/api/users/login")
-						.uri("http://localhost:8083"))
+						.uri("http://usermicroservice:80"))
+				.route("users_v2", r -> r.host("localhost:8080")
+						.and()
+						.path("/api/users", "/api/users/{email}", "/api/users/follow", "/api/users/unfollow", "/api/users/password/{email}", "/api/users/login")
+						.uri("http://usermicroservice:80"))
 				.build();
 	}
 
