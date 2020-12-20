@@ -9,19 +9,25 @@ It represents a simplified version of e.g. Twitter. There are users, who can pos
 This project has been split to Monolithic and Microservices directories. Monolithic contains files of service before it was split to individual microservices - User Microservice, Post microservice and API Gateway, which is routing requests to Social Posting service to proper microservices.
 
 ## Usage
-To deploy Social Posting application use provided `docker-compose.yml`, by running
-```bash
-docker-compose up
-```
-when in SocialPosting directory. This will generate 2 docker networks (frontend and backend) and 5 docker containers - frontend web server, reverse proxy, backend API gateway and 2 containers for each micro service running in the backend.
+To start Social Posting application:
+1. **Build** APIGateway, UserMicroservice and  PostMicroservice, by navigating to corresponding project directory and running
+	```bash
+	mvn package
+	```
+	**Make sure to build all 3 projects.**  
+2. **Build** frontend, by navigating to SocialPostingFrontend and running
+	```bash
+	npm run build
+	```
+3. **Deploy** application by using provided `docker-compose.yml`, by running
+	```bash
+	docker-compose up
+	```
+
+This will generate 2 docker networks (frontend and backend) and 5 docker containers - frontend web server, reverse proxy, backend API gateway and 2 containers for each micro service running in the backend. Microservices and APIGateway are in network called `backend` and frontend server is in network called `frontend`. They communicate through reverse proxy, which is in both networks.
 
 Frontend web server is reachable on `localhost:8084`. You can also make HTTP requests directly to API gateway through reverse proxy, which is running on `localhost:8080`.
 When making requests to backend make sure to use exposed port (`localhost:8080`), not internal docker name, as host is unable to resolve this name.
-
-If you want to make any changes to any of the backend services make sure to later package it to jar.
-```bash
-mvn package
-```
 
 ## API reference
 
