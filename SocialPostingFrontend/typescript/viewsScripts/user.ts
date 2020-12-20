@@ -96,7 +96,7 @@ function setFollowButton(email: string, list: string[]) {
 }
 
 function handleEditButton(email: string) {
-	location.replace(`http://localhost:8084/views/edit_user?email=${email}`);
+	location.replace(`http://localhost:8084/views/edit_user.html?email=${email}`);
 }
 
 function handleDeleteButton(email: string) {
