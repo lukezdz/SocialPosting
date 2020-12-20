@@ -17,6 +17,7 @@ To start Social Posting application:
 	**Make sure to build all 3 projects.**  
 2. **Build** frontend, by navigating to SocialPostingFrontend and running
 	```bash
+	npm install
 	npm run build
 	```
 3. **Deploy** application by using provided `docker-compose.yml`, by running
