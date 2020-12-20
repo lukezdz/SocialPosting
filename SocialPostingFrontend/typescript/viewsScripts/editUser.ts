@@ -34,5 +34,5 @@ function handleSaveButton(email: string) {
 		"birthDate": birth.value
 	}
 
-	users.updateUser(email, request, function(){location.replace(`./views/user?email=${email}`)});
+	users.updateUser(email, request, function(){location.replace(`./views/user.html?email=${email}`)});
 }
