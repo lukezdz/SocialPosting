@@ -54,5 +54,5 @@ export function checkAndSendRequest() {
 		password: password.value
 	}
 
-	users.createUser(request, function(){Utils.saveUserEmail(email.value); location.replace(`./views/user?email=${email.value}`)});
+	users.createUser(request, function(){Utils.saveUserEmail(email.value); location.replace(`./user.html?email=${email.value}`)});
 }
