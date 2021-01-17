@@ -10,9 +10,9 @@ This project has been split to Monolithic and Microservices directories. Monolit
 
 ## Usage
 To start Social Posting application:
-1. **Build** APIGateway, UserMicroservice and  PostMicroservice, by navigating to corresponding project directory and running
+1. **Build** APIGateway, UserMicroservice and  PostMicroservice, by using script provided in scripts directory
 	```bash
-	mvn package
+	bash scripts/build-microservices.sh
 	```
 	**Make sure to build all 3 projects.**  
 2. **Build** frontend, by navigating to SocialPostingFrontend and running
@@ -25,7 +25,7 @@ To start Social Posting application:
 	docker-compose up
 	```
 
-This will generate 2 docker networks (frontend and backend) and 5 docker containers - frontend web server, reverse proxy, backend API gateway and 2 containers for each micro service running in the backend. Microservices and APIGateway are in network called `backend` and frontend server is in network called `frontend`. They communicate through reverse proxy, which is in both networks.
+This will generate 2 docker networks (frontend and backend) and 5 docker containers - frontend web server, reverse proxy, backend API gateway and 2 containers for each micro service running in the backend along with 2 containers running MySQL databases, one for each backend microservice. Microservices, databases and APIGateway are in network called `backend` and frontend server is in network called `frontend`. They communicate through reverse proxy, which is in both networks. User microservice additionaly uses docker volume to store all users' profile pictures. Volume is mounted in /images directory in container and located in ./images folder in directory in which this README is located.
 
 Frontend web server is reachable on `localhost:8084`. You can also make HTTP requests directly to API gateway through reverse proxy, which is running on `localhost:8080`.
 When making requests to backend make sure to use exposed port (`localhost:8080`), not internal docker name, as host is unable to resolve this name.
