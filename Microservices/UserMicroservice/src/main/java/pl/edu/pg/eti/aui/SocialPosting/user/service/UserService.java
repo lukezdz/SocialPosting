@@ -1,12 +1,20 @@
 package pl.edu.pg.eti.aui.SocialPosting.user.service;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pg.eti.aui.SocialPosting.user.entity.User;
 import pl.edu.pg.eti.aui.SocialPosting.user.repository.UserRepository;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -88,5 +96,39 @@ public class UserService {
 		}, () -> {
 			System.err.println("Something went wrong.");
 		});
+	}
+
+	@Transactional
+	public void updateUserProfilePicture(User user, InputStream pictureStream) throws IOException {
+		BufferedImage image = ImageIO.read(pictureStream);
+		String filepath = resolvePicturePath(user.getEmail()) + ".png";
+		ImageIO.write(image, "png", new File(filepath));
+		user.setProfilePicturePath(filepath);
+		user.setProfilePictureUploadTime(LocalDateTime.now());
+	}
+
+	public byte[] getUserProfilePicture(User user) throws IOException {
+		String filepath = user.getProfilePicturePath() != null ? user.getProfilePicturePath() : "/image/default.png";
+		InputStream is = new FileInputStream(filepath);
+
+		byte[] target = new byte[is.available()];
+		is.read(target);
+
+		return target;
+	}
+
+	private String resolvePicturePath(String email) {
+		String[] split = email.split("@");
+		String[] domain = split[1].split(".");
+
+		StringBuilder finalPath = new StringBuilder();
+		for (int i = domain.length - 1; i >= 0; i--) {
+			finalPath.append(domain[i]);
+		}
+
+		finalPath.append(split[0]);
+		finalPath.append(DigestUtils.sha256Hex(LocalDateTime.now().toString()));
+
+		return finalPath.toString();
 	}
 }
