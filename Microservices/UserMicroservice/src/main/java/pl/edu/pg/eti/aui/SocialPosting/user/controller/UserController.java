@@ -21,11 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.CreateUserRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.FollowUserRequest;
+import pl.edu.pg.eti.aui.SocialPosting.user.dto.GetProfilePictureMetadataResponse;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.GetUserResponse;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.GetUsersResponse;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.LoginRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.UnfollowUserRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.UpdatePasswordRequest;
+import pl.edu.pg.eti.aui.SocialPosting.user.dto.UpdateProfilePictureDescriptionRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.dto.UpdateUserRequest;
 import pl.edu.pg.eti.aui.SocialPosting.user.entity.User;
 import pl.edu.pg.eti.aui.SocialPosting.user.service.UserService;
@@ -68,6 +70,12 @@ public class UserController {
 		return ResponseEntity.notFound().build();
 	}
 
+	@GetMapping("{email}/profile-pic/metadata")
+	public ResponseEntity<GetProfilePictureMetadataResponse> getProfilePictureDescriptionResponse(@PathVariable("email") String email) {
+		return userService.find(email)
+				.map(value -> ResponseEntity.ok(GetProfilePictureMetadataResponse.entityToDtoMapper().apply(value)))
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
 
 	@PostMapping
 	public ResponseEntity<Void> createUser(@RequestBody CreateUserRequest request, UriComponentsBuilder builder) {
@@ -182,6 +190,22 @@ public class UserController {
 				return ResponseEntity.badRequest().build();
 			}
 
+			return ResponseEntity.accepted().build();
+		}
+		else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@PutMapping("{email}/profile-pic/metadata")
+	public ResponseEntity<Void> updateUsersProfilePictureDescription(
+			@PathVariable("email") String email,
+			@RequestBody UpdateProfilePictureDescriptionRequest request)
+	{
+		Optional<User> user = userService.find(email);
+		if (user.isPresent()) {
+			UpdateProfilePictureDescriptionRequest.dtoToEntityMapper().apply(user.get(), request);
+			userService.update(user.get());
 			return ResponseEntity.accepted().build();
 		}
 		else {

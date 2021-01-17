@@ -29,10 +29,6 @@ import java.util.Set;
 @Entity()
 @Table(name = "users")
 public class User implements Serializable {
-	@ToString.Exclude
-	@Value("${socialposting.deployment.image.location}")
-	private String basePath;
-
 	@Getter
 	@Setter
 	private String name;
@@ -60,6 +56,12 @@ public class User implements Serializable {
 	private String password;
 
 	@Getter
+	@Setter
+	@ToString.Exclude
+	private String profilePictureDescription = "";
+
+	@Getter
+	@Setter
 	@ToString.Exclude
 	private String profilePicturePath;
 
@@ -74,10 +76,6 @@ public class User implements Serializable {
 
 	public boolean checkPassword(String password) {
 		return this.password.equals(DigestUtils.sha256Hex(password));
-	}
-
-	public void setProfilePicturePath(String path) {
-		profilePicturePath = basePath + path;
 	}
 
 	public String basicInfo() {

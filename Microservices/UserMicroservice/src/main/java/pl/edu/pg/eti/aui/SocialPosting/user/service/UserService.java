@@ -1,7 +1,9 @@
 package pl.edu.pg.eti.aui.SocialPosting.user.service;
 
+import lombok.ToString;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pg.eti.aui.SocialPosting.user.entity.User;
@@ -21,6 +23,9 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+	@Value("${socialposting.deployment.image.location}")
+	private String basePicturePath;
+
 	private final UserRepository userRepository;
 
 	@Autowired
@@ -101,14 +106,16 @@ public class UserService {
 	@Transactional
 	public void updateUserProfilePicture(User user, InputStream pictureStream) throws IOException {
 		BufferedImage image = ImageIO.read(pictureStream);
-		String filepath = resolvePicturePath(user.getEmail()) + ".png";
-		ImageIO.write(image, "png", new File(filepath));
+		String filepath = resolvePicturePath(user);
+		File file = new File(filepath);
+		file.getParentFile().mkdirs();
+		ImageIO.write(image, "png", file);
 		user.setProfilePicturePath(filepath);
 		user.setProfilePictureUploadTime(LocalDateTime.now());
 	}
 
 	public byte[] getUserProfilePicture(User user) throws IOException {
-		String filepath = user.getProfilePicturePath() != null ? user.getProfilePicturePath() : "/image/default.png";
+		String filepath = user.getProfilePicturePath() != null ? user.getProfilePicturePath() : basePicturePath + "DefaultProfilePicture.png";
 		InputStream is = new FileInputStream(filepath);
 
 		byte[] target = new byte[is.available()];
@@ -117,17 +124,23 @@ public class UserService {
 		return target;
 	}
 
-	private String resolvePicturePath(String email) {
+	private String resolvePicturePath(User user) {
+		String email = user.getEmail();
 		String[] split = email.split("@");
-		String[] domain = split[1].split(".");
+		String[] domain = split[1].split("\\.");
 
 		StringBuilder finalPath = new StringBuilder();
+		finalPath.append(basePicturePath);
 		for (int i = domain.length - 1; i >= 0; i--) {
 			finalPath.append(domain[i]);
+			finalPath.append("/");
 		}
 
 		finalPath.append(split[0]);
-		finalPath.append(DigestUtils.sha256Hex(LocalDateTime.now().toString()));
+		finalPath.append("/");
+		finalPath.append(DigestUtils.sha256Hex(
+				user.getName() + user.getSurname() + LocalDateTime.now().toString()));
+		finalPath.append(".png");
 
 		return finalPath.toString();
 	}

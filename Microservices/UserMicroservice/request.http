@@ -1,0 +1,12 @@
+###
+
+PUT http://localhost:8080/api/users/jeff.cudos@borneo.com/profile-pic
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="profile-pic"; filename="DefaultProfilePicture.png"
+
+< ../../ImagesToUpload/ProfilePic.png
+--boundary--
+
+###

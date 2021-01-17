@@ -40,7 +40,7 @@ services:
       usersdatabase:
         condition: service_healthy
     volumes:
-      - socialposting-images:/images
+      - ./images:/images
     networks:
       backend:
   
@@ -83,6 +83,3 @@ services:
 networks:
   frontend:
   backend:
-
-volumes:
-  socialposting-images:

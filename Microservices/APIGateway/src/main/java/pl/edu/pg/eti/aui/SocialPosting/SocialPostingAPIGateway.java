@@ -31,11 +31,15 @@ public class SocialPostingAPIGateway {
 						.uri("http://postmicroservice:80"))
 				.route("users", r -> r.host("apigateway")
 						.and()
-						.path("/api/users", "/api/users/{email}", "/api/users/follow", "/api/users/unfollow", "/api/users/password/{email}", "/api/users/login")
+						.path("/api/users", "/api/users/{email}", "/api/users/{email}/profile-pic",
+								"/api/users/{email}/profile-pic/metadata", "/api/users/follow", "/api/users/unfollow",
+								"/api/users/password/{email}", "/api/users/login")
 						.uri("http://usermicroservice:80"))
 				.route("users_v2", r -> r.host("localhost:8080")
 						.and()
-						.path("/api/users", "/api/users/{email}", "/api/users/{email}/profile-pic", "/api/users/follow", "/api/users/unfollow", "/api/users/password/{email}", "/api/users/login")
+						.path("/api/users", "/api/users/{email}", "/api/users/{email}/profile-pic",
+								"/api/users/{email}/profile-pic/metadata", "/api/users/follow", "/api/users/unfollow",
+								"/api/users/password/{email}", "/api/users/login")
 						.uri("http://usermicroservice:80"))
 				.build();
 	}
