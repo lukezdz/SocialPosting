@@ -1,4 +1,5 @@
 import { UserData, Users } from '../user/users';
+import { Utils } from '../utils/utils';
 
 const users = new Users();
 
@@ -35,4 +36,27 @@ function handleSaveButton(email: string) {
 	}
 
 	users.updateUser(email, request, function(){location.replace(`./user.html?email=${email}`)});
+	
+	const filefield = document.getElementById('profile-pic') as HTMLInputElement;
+	if (filefield && filefield.files) {
+		users.client.uploadFile(
+			`${Utils.getBackendUrl()}/users/${email}/profile-pic`,
+			function(){location.replace(`./user.html?email=${email}`); location.reload()},
+			'profile-pic',
+			filefield.files[0],
+			filefield.files[0].name
+		);
+	}
+
+	const profilePicDesc = document.getElementById('profile-pic-desc') as HTMLInputElement;
+	if (profilePicDesc) {
+		const request = {
+			"description": profilePicDesc.value
+		}
+		users.client.put(
+			`${Utils.getBackendUrl()}/users/${email}/profile-pic/metadata`,
+			function(){location.replace(`./user.html?email=${email}`); location.reload()},
+			request
+		);
+	}
 }

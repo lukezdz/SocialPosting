@@ -70,6 +70,13 @@ export interface ButtonProps {
 	id?: string
 }
 
+export interface ImageProps {
+	src: string,
+	title?: string,
+	classes?: string[],
+	id?: string
+}
+
 export class DOMUtils {
 	public static createH2(text: string, classes?: string[], id?: string): HTMLHeadingElement {
 		return this.createHeading(2, text, classes, id);
@@ -183,6 +190,25 @@ export class DOMUtils {
 
 		return textArea;
 	}
+
+	public static createImage(props: ImageProps): HTMLImageElement {
+		const image = document.createElement('img');
+		image.src = props.src;
+
+		if (props.id) {
+			image.id = props.id;
+		}
+
+		if (props.classes) {
+			image.classList.add(...props.classes);
+		}
+
+		if (props.title) {
+			image.title = props.title;
+		}
+
+		return image;
+	}
 }
 
 export class HttpClient {
@@ -190,10 +216,10 @@ export class HttpClient {
 
 	/**
 	 * Sends HTTP DELETE request to provided URL
-	 * @param url full url
+	 * @param url full URL
 	 * @param callback function taking no params needed to be executed when response is ready
 	 */
-	public delete(url, callback) {
+	public delete(url: string, callback) {
 		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if(this.readyState === 4 && this.status === 202) {
@@ -206,10 +232,10 @@ export class HttpClient {
 
 	/**
 	 * Sends HTTP GET request to provided URL
-	 * @param url full url
+	 * @param url full URL
 	 * @param callback function taking JSON object as parameter to be executed when response is ready
 	 */
-	public get(url, callback) {
+	public get(url: string, callback) {
 		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState === 4 && this.status === 200) {
@@ -223,12 +249,28 @@ export class HttpClient {
 	}
 
 	/**
+	 * Sends HTTP GET request to provided URL
+	 * @param url full URL
+	 * @param callback function taking raw response from server as parameter to be executed when response is ready
+	 */
+	public getRaw(url: string, callback) {
+		const xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState === 4 && this.status === 200) {
+				callback(this.responseText);
+			}
+		};
+		xhttp.open("GET", url, true);
+		xhttp.send();
+	}
+
+	/**
 	 * Sends HTTP POST request to provided URL
-	 * @param url full url
+	 * @param url full URL
 	 * @param callback function taking no params needed to be executed when response is ready
 	 * @param request JSON body of request
 	 */
-	public post(url, callback, request) {
+	public post(url: string, callback, request) {
 		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState === 4 && (this.status === 201 || this.status === 202)) {
@@ -242,11 +284,11 @@ export class HttpClient {
 
 	/**
 	 * Sends HTTP PUT request to provided URL
-	 * @param url full url
+	 * @param url full URL
 	 * @param callback function taking no params needed to be executed when response is ready
 	 * @param request JSON body of request
 	 */
-	public put(url, callback, request) {
+	public put(url: string, callback, request) {
 		const xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState === 4 && this.status === 202) {
@@ -257,5 +299,25 @@ export class HttpClient {
 		xhttp.setRequestHeader("Content-Type", "application/json");
 		xhttp.send(JSON.stringify(request));
 	}
-	
+
+	/**
+	 * Sends HTTP PUT request to provided URL, with content type form-data/multipart
+	 * @param url full URL
+	 * @param callback function taking no params needed to be executed when response is ready
+	 * @param name name of key for file
+	 * @param value content to be uploaded
+	 * @param filename name of file being uploaded
+	 */
+	public uploadFile(url: string, callback, name: string, value: string | Blob, filename: string) {
+		const xhttp = new XMLHttpRequest();
+		const formData = new FormData();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState === 4 && this.status === 202) {
+				callback();
+			}
+		}
+		formData.append(name, value, filename);
+		xhttp.open("PUT", url, true);
+		xhttp.send(formData)
+	}
 }

@@ -12,8 +12,14 @@ export function displayFullUserInfo(userData: UserData) {
 
 	const name = DOMUtils.createH2(`${userData.name} ${userData.surname}`, ['user-basic-info-name']);
 	const email = DOMUtils.createParagraph(userData.email, ['user-basic-info-email']);
+	const profilePicture = DOMUtils.createImage({
+		src: `${Utils.getBackendUrl()}/users/${userData.email}/profile-pic`, 
+		classes: ['user-profile-picture'],
+		id: 'user-profile-picture'
+	});
 	basicInfoDiv?.appendChild(name);
 	basicInfoDiv?.appendChild(email);
+	basicInfoDiv?.appendChild(profilePicture);
 
 	if (Utils.isUserLoggedIn()) {
 		if (userData.email == Utils.getLoggedInUserEmail()) {
@@ -72,7 +78,28 @@ export function displayFullUserInfo(userData: UserData) {
 		addPostDiv.appendChild(addPostButton);
 	}
 
+	users.client.get(
+		`${Utils.getBackendUrl()}/users/${userData.email}/profile-pic/metadata`,
+		setProfilePictureTitle
+	);
 	posts.getPostIdsByAuthor(userData.email, displayPostList);
+}
+
+function setProfilePictureTitle(response) {
+	const image = document.getElementById('user-profile-picture') as HTMLImageElement;
+	let upTime = response["profilePictureUploadTime"];
+	let desc = response["description"];
+	let title = ""
+	if (upTime && desc) {
+		title = `${Utils.isoFormatDateFriendlyDate(upTime)} - ${desc}`
+	}
+	else if (upTime) {
+		title = `${Utils.isoFormatDateFriendlyDate(upTime)}`;
+	}
+	else if (desc) {
+		title = desc;
+	}
+	image.title = title;
 }
 
 function setFollowButton(email: string, list: string[]) {

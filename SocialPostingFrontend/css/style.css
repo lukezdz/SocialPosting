@@ -187,36 +187,44 @@ button {
 
 .user-basic-info {
 	display: grid;
-	grid-template-columns: auto 150px 150px;
+	grid-template-columns: 500px auto 150px 150px;
 	grid-template-rows: auto auto;
 }
 
 .user-basic-info-name {
 	grid-row-start: 1;
 	grid-row-end: 2;
-	grid-column-start: 1;
-	grid-column-end: 2;
+	grid-column-start: 2;
+	grid-column-end: 3;
 }
 
 .user-basic-info-email {
-	grid-row-start: 2;
-	grid-row-end: 3;
-	grid-column-start: 1;
-	grid-column-end: 2;
-}
-
-.user-basic-info-button {
 	grid-row-start: 2;
 	grid-row-end: 3;
 	grid-column-start: 2;
 	grid-column-end: 3;
 }
 
-.user-basic-info-delete {
+.user-profile-picture {
+	grid-row-start: 1;
+	grid-row-end: 3;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	margin: 0 20px 0 0;
+}
+
+.user-basic-info-button {
 	grid-row-start: 2;
 	grid-row-end: 3;
 	grid-column-start: 3;
 	grid-column-end: 4;
+}
+
+.user-basic-info-delete {
+	grid-row-start: 2;
+	grid-row-end: 3;
+	grid-column-start: 4;
+	grid-column-end: 5;
 }
 
 .user-add-post-container {

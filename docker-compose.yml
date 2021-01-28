@@ -1,20 +1,46 @@
 version: "3.9"
 services:
-  frontend:
+  # FRONTENDS
+  frontend1:
+    container_name: frontend1
+    build: ./SocialPostingFrontend
+    networks:
+      frontend:
+  frontend2:
+    container_name: frontend2
+    build: ./SocialPostingFrontend
+    networks:
+      frontend:
+  
+  # LOAD BALANCERS
+  frontend-lb:
     container_name: frontend
-    build:
-      context: .
-      dockerfile: frontend_dockerfile
+    build: ./LoadBalancers/Frontend
     ports:
       - 8084:80
     networks:
       frontend:
-  
+  usermicroservice-lb:
+    container_name: usermicroservice
+    build: ./LoadBalancers/UserMicroservice
+    depends_on:
+      - usermicroservice1
+      - usermicroservice2
+    networks:
+      backend:
+  postmicroservice-lb:
+    container_name: postmicroservice
+    build: ./LoadBalancers/PostMicroservice
+    depends_on:
+      - postmicroservice1
+      - usermicroservice2
+    networks:
+      backend:
+
+  # REVERSE PROXY
   reverse_proxy:
     container_name: reverse_proxy
-    build:
-      context: .
-      dockerfile: reverseproxy_dockerfile
+    build: ./ReverseProxy
     ports:
       - 8080:80
     networks:
@@ -23,19 +49,27 @@ services:
           - apigateway
       backend:
   
+  # APIGATEWAY
   apigateway:
     container_name: apigateway
-    build:
-      context: .
-      dockerfile: apigateway_dockerfile
+    build: ./Microservices/APIGateway
     networks:
       backend:
   
-  usermicroservice:
-    container_name: usermicroservice
-    build:
-      context: .
-      dockerfile: usermicroservice_dockerfile
+  # USER MICROSERVICE BACKENDS
+  usermicroservice1:
+    container_name: usermicroservice1
+    build: ./Microservices/UserMicroservice
+    depends_on:
+      usersdatabase:
+        condition: service_healthy
+    volumes:
+      - ./images:/images
+    networks:
+      backend:
+  usermicroservice2:
+    container_name: usermicroservice2
+    build: ./Microservices/UserMicroservice
     depends_on:
       usersdatabase:
         condition: service_healthy
@@ -44,35 +78,37 @@ services:
     networks:
       backend:
   
-  postmicroservice:
-    container_name: postmicroservice
-    build:
-      context: .
-      dockerfile: postmicroservice_dockerfile
+  # POST MICROSERVICE BACKENDS
+  postmicroservice1:
+    container_name: postmicroservice1
+    build: ./Microservices/PostMicroservice
     depends_on:
       postsdatabase:
         condition: service_healthy
-    command: []
     networks:
       backend:
-  
+  postmicroservice2:
+    container_name: postmicroservice2
+    build: ./Microservices/PostMicroservice
+    depends_on:
+      postsdatabase:
+        condition: service_healthy
+    networks:
+      backend:
+
+  # DATABASES
   usersdatabase:
     container_name: usersdatabase
-    build:
-      context: .
-      dockerfile: users_database_dockerfile
+    build: ./dockerMisc/usersDB
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
     networks:
       backend:
-  
   postsdatabase:
     container_name: postsdatabase
-    build:
-      context: .
-      dockerfile: posts_database_dockerfile
+    build: ./dockerMisc/postsDB
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
