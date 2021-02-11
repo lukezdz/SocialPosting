@@ -13,7 +13,7 @@ export function displayFullUserInfo(userData: UserData) {
 	const name = DOMUtils.createH2(`${userData.name} ${userData.surname}`, ['user-basic-info-name']);
 	const email = DOMUtils.createParagraph(userData.email, ['user-basic-info-email']);
 	const profilePicture = DOMUtils.createImage({
-		src: `${Utils.getBackendUrl()}/users/${userData.email}/profile-pic`, 
+		src: users.getUserProfilePicture(userData.email),
 		classes: ['user-profile-picture'],
 		id: 'user-profile-picture'
 	});

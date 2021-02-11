@@ -74,6 +74,10 @@ export class Users {
 		this.client.delete(`${this.backendURL}/${email}`, function() {Utils.deleteUserEmail(); location.replace(`http://localhost:8084/views/user_list.html`)});
 	}
 
+	public getUserProfilePicture(email: string): string {
+		return `${this.backendURL}/users/${email}/profile-pic`
+	}
+
 	public updateUserProfilePicture(email: string, callback) {
 
 	}
